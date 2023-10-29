@@ -2,9 +2,6 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 import scrapy
-import shadow_useragent
-
-ua = shadow_useragent.ShadowUserAgent()
 
 API_KEY = "1208de1b-9d3a-435f-a41c-df151ef7cfd1"
 
@@ -13,6 +10,7 @@ def get_scrapeops_url(url):
     payload = {'api_key': API_KEY, 'url': url, 'bypass': 'cloudflare'}
     proxy_url = 'https://proxy.scrapeops.io/v1/?' + urlencode(payload)
     return proxy_url
+
 
 class Website1Spider(scrapy.Spider):
     name = "website1"
@@ -26,9 +24,22 @@ class Website1Spider(scrapy.Spider):
             yield scrapy.Request(url=get_scrapeops_url(url), callback=self.parse)
 
     def parse(self, response):
-        title =  response.css('h1::text').get()
+        # Find all article divs
+        articles = response.css('div.article')
 
-        processed_data = {
-            "title": title,
-        }
-        yield processed_data
+        for article in articles:
+            # Extract the title from the current article
+            title = article.css('div.content div.header div.title a::text').get()
+
+            # Extract the content from the current article
+            content = article.css('div.content div.body p::text').get()
+
+            # Create a dictionary to store the extracted data for this article
+            data = {
+                'title': title,
+                'content': content,
+                'url': response.url,
+            }
+
+            # Yield the data for this article
+            yield data
