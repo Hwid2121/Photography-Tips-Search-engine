@@ -7,6 +7,6 @@ import scrapy
 
 
 class PhotographyTipsScraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    title = scrapy.Field(default=None)
+    content = scrapy.Field(default=None)
+    url = scrapy.Field(default=None)

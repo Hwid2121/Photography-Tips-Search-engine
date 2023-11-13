@@ -1,6 +1,8 @@
 import scrapy
 from urllib.parse import urlencode
 
+from ..items import PhotographyTipsScraperItem
+
 API_KEY = "1208de1b-9d3a-435f-a41c-df151ef7cfd1"
 
 
@@ -40,19 +42,20 @@ class Website1Spider(scrapy.Spider):
         # Extract the content from the current article
         main_content = response.css('div.mainContent div.articleBody')
 
-        content = main_content.xpath('.//p/text() | .//h2/text()').getall()
-        data = {
-            'title': title,
-            'content': content,
-            'url': response.url,
-        }
+        # Create a new PhotographyTipsScraperItem instance
+        item = PhotographyTipsScraperItem()
 
+        content = main_content.xpath('.//p/text() | .//p/*/text() | .//h2/text() | .//h2/*/text()').getall()
+        item['title'] = title
+        item['content'] = content
+        item['url'] = response.url
         # Yield the data for this article
-        yield data
+        yield item
 
     def parse(self, response):
         # Find all article divs
         articles = response.css('div.article')
+
 
         for article in articles:
 

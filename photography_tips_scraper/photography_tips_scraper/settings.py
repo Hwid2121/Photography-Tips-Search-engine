@@ -15,6 +15,7 @@ NEWSPIDER_MODULE = "photography_tips_scraper.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "photography_tips_scraper (+http://www.yourdomain.com)"
+USER_AGENT='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -62,9 +63,16 @@ DOWNLOAD_DELAY = 3
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "photography_tips_scraper.pipelines.PhotographyTipsScraperPipeline": 300,
-#}
+ITEM_PIPELINES = {
+   "photography_tips_scraper.pipelines.ContentPipeline": 300,
+   "photography_tips_scraper.pipelines.MongoDBPipeline": 100,
+}
+
+MONGODB_SERVER = "localhost"
+MONGODB_PORT = 27017
+MONGODB_DB = "informationRetrieval"
+MONGODB_COLLECTION = "data-Website-1"
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
