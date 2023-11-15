@@ -36,25 +36,33 @@ class MongoDBPipeline:
         self.collection = db[settings['MONGODB_COLLECTION']]
 
     def process_item(self, item, spider):
-
-        # clean the db
+        # Clean the db
         adapter = ItemAdapter(item)
+
+        # Clean title
         if adapter.get('title') is not None:
-            title = adapter['title']
-            title = ''.join(title).replace('\r\n', '').strip().rstrip()
+            title = ''.join(adapter['title']).replace('\r\n', '').strip()
             adapter['title'] = title
-        if adapter.get('content') is not None:
-            content = adapter['content']
-            content = ''.join(content).replace('\r\n', '').strip().rstrip()
-            adapter['content'] = content
-        if adapter.get('title') is None:
-            raise DropItem("Missing title in %s" % item)
-        elif adapter.get('content') is None:
-            raise DropItem("Missing content in %s" % item)
-        elif adapter.get('url') is None:
-            raise DropItem("Missing url in %s" % item)
         else:
-            self.collection.update_one(dict(item), {'$set': dict(item)}, upsert=True)
-            logger.debug("Post added to MongoDB")
+            raise DropItem("Missing title in %s" % item)
+
+        # Clean content
+        if adapter.get('content') is not None:
+            content = (''.join(adapter['content']).replace('\r\n', '')
+                       .replace('\n', '').replace('\t', '')
+                       .replace('\r','').replace('\xa0', '').
+                       strip())
+            adapter['content'] = content
+
+        else:
+            raise DropItem("Missing content in %s" % item)
+
+        # Check for other required fields
+        if adapter.get('url') is None:
+            raise DropItem("Missing URL in %s" % item)
+
+        # Update MongoDB collection
+        self.collection.update_one(dict(item), {'$set': dict(item)}, upsert=True)
+        logger.debug("Post added to MongoDB")
 
         return item

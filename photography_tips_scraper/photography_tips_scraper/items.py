@@ -10,3 +10,5 @@ class PhotographyTipsScraperItem(scrapy.Item):
     title = scrapy.Field(default=None)
     content = scrapy.Field(default=None)
     url = scrapy.Field(default=None)
+    images_url = scrapy.Field(default=None)
+    article_tags = scrapy.Field(default=None)
