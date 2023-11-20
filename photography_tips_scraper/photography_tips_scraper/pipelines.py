@@ -14,15 +14,13 @@ from scrapy.utils.project import get_project_settings
 from .items import PhotographyTipsScraperItem
 
 logger = logging.getLogger()
+settings = get_project_settings()
 
 
 class ContentPipeline:
 
     def process_item(self, item, spider):
         pass
-
-
-settings = get_project_settings()
 
 
 class MongoDBPipeline:
@@ -33,7 +31,7 @@ class MongoDBPipeline:
             settings.get('MONGODB_PORT')
         )
         db = conn[settings.get('MONGODB_DB')]
-        self.collection = db[settings['MONGODB_COLLECTION']]
+        self.collection = db[settings.get('MONGODB_COLLECTION')]
 
     def process_item(self, item, spider):
         # Clean the db
@@ -50,7 +48,7 @@ class MongoDBPipeline:
         if adapter.get('content') is not None:
             content = (''.join(adapter['content']).replace('\r\n', '')
                        .replace('\n', '').replace('\t', '')
-                       .replace('\r','').replace('\xa0', '').
+                       .replace('\r', '').replace('\xa0', '').
                        strip())
             adapter['content'] = content
 

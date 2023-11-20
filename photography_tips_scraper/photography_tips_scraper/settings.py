@@ -71,7 +71,8 @@ ITEM_PIPELINES = {
 MONGODB_SERVER = "localhost"
 MONGODB_PORT = 27017
 MONGODB_DB = "informationRetrieval"
-MONGODB_COLLECTION = "data-Website-1"
+MONGODB_COLLECTION = "data_Website"
+MONGODB_PIPELINE_SPIDER_NAME = "website2"
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)

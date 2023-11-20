@@ -1,8 +1,18 @@
 import scrapy
 
+from ..items import PhotographyTipsScraperItem
+from scrapy import settings
+
+from scrapy.utils.project import get_project_settings
 
 class Website2Spider(scrapy.Spider):
     name = "website2"
+
+    custom_settings = {
+        'MONGODB_PIPELINE_SPIDER_NAME': name  # Pass the spider name to the pipeline
+    }
+
+
     allowed_domains = ["photographylife.com"]
 
     start_url = 'https://photographylife.com/learn-photography'
@@ -18,18 +28,14 @@ class Website2Spider(scrapy.Spider):
         ul_content = main_content.css('ul')
         headers = {'User-Agent': 'UserAgent'}
 
-        url = 'https://photographylife.com/how-was-this-picture-made-12'
-        yield scrapy.Request(url=url, headers=headers, callback=self.parse_article)
-
-        #
-        # for ul_content in ul_content:
-        #     lis = ul_content.css('li')
-        #     for li in lis:
-        #         url = li.css('a::attr(href)').get()
-        #         url = response.urljoin(url)
-        #         headers = {'User-Agent': 'UserAgent'}
-        #         # go inside the url of the article
-        #         yield scrapy.Request(url=url, headers=headers, callback=self.parse_article)
+        for ul_content in ul_content:
+            lis = ul_content.css('li')
+            for li in lis:
+                url = li.css('a::attr(href)').get()
+                url = response.urljoin(url)
+                headers = {'User-Agent': 'UserAgent'}
+                # go inside the url of the article
+                yield scrapy.Request(url=url, headers=headers, callback=self.parse_article)
 
     def parse_article(self, response):
         content_head = response.css('header.entry-header')
@@ -43,12 +49,11 @@ class Website2Spider(scrapy.Spider):
         # extracting tags
         tags = content_footer.css('span.entry-tags a::text').extract()
 
-        print("title", title)
-        print("content", content)
-        print("images", images)
-        print("tags", tags)
-        print("url", response.url)
-        print("--------------------------------------------------")
-
-
-
+        item = PhotographyTipsScraperItem()
+        item['title'] = title
+        item['content'] = content
+        item['url'] = response.url
+        item['images_url'] = images
+        item['article_tags'] = tags
+        # Yield the data for this article
+        yield item

@@ -14,6 +14,9 @@ def get_scrapeops_url(url):
 
 class Website1Spider(scrapy.Spider):
     name = "website1"
+    custom_settings = {
+        'MONGODB_PIPELINE_SPIDER_NAME': name  # Pass the spider name to the pipeline
+    }
     allowed_domains = ["www.dpreview.com"]
     # start_urls = ["https://www.dpreview.com/features/photography"]
 
