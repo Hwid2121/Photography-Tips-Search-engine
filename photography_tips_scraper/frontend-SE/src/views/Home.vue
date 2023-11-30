@@ -1,7 +1,7 @@
 <template>
-  <HelloWorld />
+  <searchEngine />
 </template>
 
 <script setup>
-  import HelloWorld from '@/components/HelloWorld.vue'
+  import searchEngine from '@/components/searchEngine.vue'
 </script>
