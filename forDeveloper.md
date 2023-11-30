@@ -1,5 +1,6 @@
-## Activate the Virtual Enviroment
+## Installing the packages
 
+To install the packages required:
 ```bash
-source venv/bin/activate
+pip install -r requirements.txt
 ```
