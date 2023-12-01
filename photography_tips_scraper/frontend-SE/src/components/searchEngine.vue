@@ -11,13 +11,13 @@
 
       <v-row class="d-flex align-center justify-center">
         <v-col>
-          <searchBar />
+          <searchBar @search-results="updateResults" />
         </v-col>
       </v-row>
       <div class="py-14" />
 
         <resultCard v-for="result in results" :result="result" />
-
+        <h1>{{ msg }}</h1>
       
     </v-responsive>
   </v-container>
@@ -26,18 +26,38 @@
 <script>
 import searchBar from '@/components/searchBar.vue';
 import resultCard from '@/components/resultCard.vue';
+import axios from 'axios';
+
+
 
 export default {
   name: 'searchEngine',
   components: {
     searchBar,
     resultCard,
-
   },
   data() {
     return {
-      results: [{title: "test", link: "test", snippet: "test", icon: "test"}]
+      results: [],
+      msg: '',
     };
   },
-};
+  methods: {
+    updateResults(newResults) {
+      this.results = newResults;
+    },
+    getMessage() {
+      axios.get('/')
+        .then((res) => {
+          this.msg = res.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  },
+    created() {
+    this.getMessage();
+  },
+  };
 </script>

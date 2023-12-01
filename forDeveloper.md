@@ -11,3 +11,12 @@ For starting the execution of the UI:
 ```bash
 npm run dev
 ```
+
+
+
+#### Back-end
+
+For starting the live server (localhost:8000):
+```bash
+uvicorn main:app --reload
+```
