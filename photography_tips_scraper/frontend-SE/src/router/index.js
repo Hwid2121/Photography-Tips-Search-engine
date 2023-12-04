@@ -19,7 +19,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.VITE_BASE_URL),
   routes,
 })
 

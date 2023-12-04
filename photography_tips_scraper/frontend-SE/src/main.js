@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import axios from 'axios';
+import axios from '../../backend/node_modules/axios';
 import { registerPlugins } from '@/plugins'
 
 
@@ -12,10 +12,12 @@ const app = createApp(App);
 registerPlugins(app)
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8000/';  // the FastAPI backend
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;  // the FastAPI backend
 
 app.use(router);
 app.mount("#app");
+console.log('process.env.VUE_APP_BASE_URL', process.env.VUE_APP_BASE_URL)
+
 
 
 // /**
