@@ -12,8 +12,6 @@ For starting the execution of the UI:
 npm run dev
 ```
 
-
-
 #### Back-end
 
 For starting the live server (localhost:8000):
