@@ -11,7 +11,11 @@
         </v-col>
       </v-row>
       <div class="py-14" />
-      <resultCard v-for="result in results" :key="result.id" :result="result" />
+      
+      <div>
+        <resultCard v-for="result in results" :key="result.id" :result="result" class="result-card" />
+      </div>
+
     </v-responsive>
   </v-container>
 </template>
@@ -38,3 +42,10 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.result-card {
+  margin-bottom: 20px;
+}
+</style>

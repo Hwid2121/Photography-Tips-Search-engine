@@ -34,18 +34,21 @@ export default {
         }
         // const query = this.parseQuery(this.search);
         const response = await axios.get('http://localhost:8000/search?query=' + query);
-        // this.handleSuccess(response.data);
-        console.log(response.data);
+        this.handleSuccess(response.data);
+        // console.log(response.results);
       } catch (error) {
         this.handleError(error);
       }
     },
-    parseQuery(query) {
-      return query.trim().replace(/\s+/g, '+');
-    }, 
     handleSuccess(data) {
       this.error = '';
-      this.$emit('search-results', data);
+      let results = data.results;
+      for (let i = 0; i < results.length; i++) {
+        if (results[i].content.length > 340) {
+          results[i].content = results[i].content.substring(0, 340) + '...';
+        }
+      }
+      this.$emit('search-results', results);
     },
     handleError(error) {
       console.error('Error fetching data:', error);

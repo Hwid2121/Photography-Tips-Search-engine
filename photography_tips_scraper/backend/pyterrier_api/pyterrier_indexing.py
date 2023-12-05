@@ -25,24 +25,6 @@ def mongodb_DF():
     # Close MongoDB connection
     client.close()
 
-# def start_indexing():
-#     global index, docs_df
-
-#     if not pt.started():
-#         pt.init()
-
-#     # Use the existing directory for the index
-#     indexer = pt.DFIndexer("./index_3docs", overwrite=True)
-#     index_ref = indexer.index(
-#         text=docs_df["content"],
-#         docno=docs_df["_id"],
-#         meta={"docno": docs_df["_id"], "content": docs_df["content"], "images_url": docs_df["images_url"], "url": docs_df["url"], "article_tags": docs_df["article_tags"], "title": docs_df["title"]},
-#         controls={"indexing": "direct", "tokeniser": "UTFTokeniser", "non.positional.postings.listing": "true", "termpipelines": "Stopwords,PorterStemmer"},
-#         props={"termpipelines": "Stopwords,PorterStemmer"},
-#         weight=pt.BM25()
-#     )
-#     index = pt.IndexFactory.of(index_ref)
-
 def start_indexing():
     global index, docs_df
 
@@ -52,12 +34,6 @@ def start_indexing():
     # Use the existing directory for the index
     indexer = pt.DFIndexer("./index_3docs", overwrite=True)
 
-    # Check if 'image_url' field exists in the DataFrame
-
-    meta_fields = list(zip(
-        ["docno", "content", "url", "article_tags", "title"],
-        [docs_df["_id"], docs_df["content"], docs_df["url"], docs_df["article_tags"], docs_df["title"]]
-    ))
 
     index_ref = indexer.index(
         text=docs_df["content"],
@@ -107,3 +83,4 @@ def init():
 
 # Example usage:
 init()
+

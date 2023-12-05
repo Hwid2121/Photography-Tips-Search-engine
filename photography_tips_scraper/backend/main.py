@@ -32,9 +32,3 @@ def search_query(query: str):
     # py_q.start_indexing()  # Corrected: Removed assignment to br
     results = py_q.search_query(query=query)
     return {"query": query, "results": results}
-    # return query ;
-    # if query in fake_data:
-    #     result = fake_data[query]
-    #     return {"query": query, "result": result}
-    # else:
-    #     raise HTTPException(status_code=404, detail="Query not found")
