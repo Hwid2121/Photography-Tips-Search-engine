@@ -47,9 +47,9 @@
         if(links.length > 10) {
           links.shift();
         }
-
         this.$cookies.set('recommender-links', links, '3d');
         this.$cookies.set('recommender', history, '3d');
+        this.$emit('card-click');
       },
       takeImage() {
       if (!this.result.images_url || this.result.images_url.length === 0) {

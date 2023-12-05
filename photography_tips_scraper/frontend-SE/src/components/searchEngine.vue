@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <!-- Main Content -->
-      <v-col class="fill-height" md="9" xs="12">
+      <v-col :md="adverts.length === 0 ? 12 : 9" xs="12" class="align-self-start mb-4">
         <v-responsive class="align-center text-center fill-height">
           <v-img height="300" src="@/assets/logo-photo.png" />
           <div class="text-body-2 font-weight-light mb-n1">Your portal for photography tips</div>
@@ -22,7 +22,7 @@
             </v-col>
            </v-row>
           <v-btn
-            v-if="results.length !=0"
+            v-if="results.length!=0"
             class="mt-4"
             color=""
             dark
@@ -34,7 +34,7 @@
 
           <div class="py-14" />
           <div>
-            <resultCard v-for="result in paginatedResults" :key="result.id" :result="result" class="result-card" />
+            <resultCard v-for="result in paginatedResults" :key="result.id" :result="result" class="result-card" @card-click="getCookie" />
           </div>
 
           <v-pagination v-if="results.length > 0" :length="totalPages" @input="changePage" v-model="currentPage" />
@@ -66,6 +66,14 @@ export default {
     searchBar,
     resultCard,
     adCard  
+  },
+  watch: {
+    results(newResults) {
+      if (newResults.length > 0) {
+        this.getCookie();
+      }
+
+    },
   },
   data() {
     return {
