@@ -106,7 +106,9 @@ def recommender(history):
      
  
     print("histo: ", history)
-    query = []
+
+    # query = []
+    query = " ".join(map(lambda ele: " ".join(ele.split("+")), history))
 
     # print("i am searching for:", query)
     # Initialize the BatchRetrieve object with the provided index and retrieval model
