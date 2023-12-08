@@ -1,11 +1,11 @@
 <template>
-  <v-card class="mx-auto text-left" max-width="1200" elevation="5" link>
+  <v-card class="mx-auto text-left" :href="result.url" @click="handleClick" max-width="1200" elevation="5" link>
     <v-card-title>
-      <a :href="result.url" class="text-h6 no-link">{{ result.title }}</a>
+      {{result.title }}
     </v-card-title>
 
     <v-card-subtitle>
-      <a :href="result.url" class="subtitle-link no-link">{{ result.url }}</a>
+      {{result.url }}
     </v-card-subtitle>
 
     <v-card-text>{{ result.content }}</v-card-text>
@@ -19,6 +19,15 @@
       result: {
         type: Object,
         required: true,
+      },
+    },
+    methods: {
+      handleClick() {
+        const history = this.$cookies.get('recommender') || [];
+        let query = this.result.title.trim().replace(/\s+/g, '+');
+        history.push(query);
+        this.$cookies.set('recommender', history, '3d');
+      
       },
     },
   };

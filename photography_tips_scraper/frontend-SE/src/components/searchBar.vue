@@ -11,6 +11,8 @@
   <p v-if="error">{{ error }}</p>
 </template>
 
+
+<!-- TODO: clear the query text from symbols! -->
 <script>
 import axios from 'axios';
 
@@ -26,8 +28,8 @@ export default {
   methods: {
     async searchData() {
       try {
-
-        let query = this.search.trim().replace(/\s+/g, '+');
+        // let query = this.search.trim().replace(/\s+/g, '+');
+        let query = this.search
         if(query == '') {
           this.error = 'Please enter a search query.';
           return;

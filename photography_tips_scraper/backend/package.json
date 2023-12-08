@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "axios": "^1.6.2",
+    "cors": "^2.8.5",
     "matplotlib": "^1.0.0",
     "nltk": "^0.0.1",
     "pandas": "^0.0.3",
