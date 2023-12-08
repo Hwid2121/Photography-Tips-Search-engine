@@ -32,11 +32,14 @@
       },
     },
     methods: {
-      handleClick() {
+      async handleClick() {
+        console.log('clicked');
         const history = this.$cookies.get('recommender') || [];
         const links = this.$cookies.get('recommender-links') || [];
 
         let tags = this.result.article_tags;
+        console.log(tags);
+        tags = tags.map(tag => tag.replace(/[^a-zA-Z\s]/g, '').trim());
         let link = this.result.url;
         history.push(tags);
         links.push(link);

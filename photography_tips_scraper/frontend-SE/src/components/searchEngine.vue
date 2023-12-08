@@ -112,7 +112,7 @@ export default {
     async getCookie() {
       const userToken = this.$cookies.get('recommender');
 
-        console.log('User Token:', JSON.stringify(userToken));
+      console.log('User Token:', JSON.stringify(userToken));
 
       // JSON.stringify(userToken)
 
