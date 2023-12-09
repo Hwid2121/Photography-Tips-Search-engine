@@ -35,7 +35,7 @@ def search_query(query: str):
 
 @app.post("/rec")
 async def advanced_search(item: Item):
-    print("resultAA: ", item)
+    # print("resultAA: ", item)
     # query = item[1]
     results = py_q.recommender(history=item.history)
     return {"query": item.history, "results": results}

@@ -50,6 +50,9 @@ export default {
           results[i].content = results[i].content.substring(0, 340) + '...';
         }
       }
+      if (results.length == 0) {
+        this.error = 'No results found for this query.';
+      }
       this.$emit('search-results', results);
     },
     handleError(error) {

@@ -2,13 +2,17 @@ import pyterrier as pt
 import pandas as pd
 import json
 import ast
+import re
 import pymongo
+from itertools import chain
+
 
 index = None
 docs_df = pd.DataFrame()
+nameFile = "DATAFROMMONGODB.json"
 
 def mongodb_DF():
-    global docs_df
+    global docs_df, nameFile
     client = pymongo.MongoClient("mongodb://localhost:27017")
     db = client["informationRetrieval"]
 
@@ -23,11 +27,22 @@ def mongodb_DF():
     docs_df = pd.concat([df_collection1, df_collection2, df_collection3], ignore_index=True)
     docs_df["_id"] = docs_df["_id"].astype(str)
 
+    docs_df.to_json(nameFile, orient="records", lines=True)
     # Close MongoDB connection
     client.close()
 
+# SET TO GET DATA FROM THE LOCAL FILE JSON
+def load_json_to_df():
+    global nameFile
+    return pd.read_json(nameFile, lines=True)
+
+
+
 def start_indexing():
     global index, docs_df
+    
+    # set from the local file
+    docs_df = load_json_to_df()
 
     if not pt.started():
         pt.init()
@@ -44,6 +59,8 @@ def start_indexing():
 
 def search_query(query):
     global index, docs_df
+    docs_df = load_json_to_df()
+
 
     # Initialize the BatchRetrieve object with the provided index and retrieval model
     br = pt.BatchRetrieve(index, num_result=5, wmodel="BM25")
@@ -72,43 +89,32 @@ def search_query(query):
             doc = docs_df.iloc[doc_id - len(docs_df)]
         else:
             doc = docs_df.iloc[doc_id]
-        docs_to_return.append({'title': doc['title'], 'content': doc['content'], 'url': doc['url'], 'article_tags': doc['article_tags']})
+        docs_to_return.append({'title': doc['title'], 'content': doc['content'], 'url': doc['url'], 'article_tags': doc['article_tags'], 'images_url': doc['images_url']})
 
     return docs_to_return
 
 
 def recommender(history):
     global index, docs_df
+    docs_df = load_json_to_df()
+
 
     # Check if history is empty or None
     if not history:
         print("Error: Empty or None history provided.")
         return []
 
-    # # Convert the string representation of a list into an actual list
-    # try:
-    #     history_list = ast.literal_eval(history)
-    # except (SyntaxError, ValueError) as e:
-    #     print(f"Error: Failed to parse history string - {str(e)}")
-    #     return []
+    corrected_history_string = history.replace("'", '"')
 
-    # # Check if index or docs_df is None
-    # if index is None or docs_df is None:
-    #     print("Error: Index or docs_df is not initialized.")
-    #     return []
+    history = json.loads(corrected_history_string)
+    history = list(chain.from_iterable(history))
 
-    # Convert the list of strings into a single space-separated query
-    # history = history.replace('+', ' ')
 
-    # query = ""
-    # for ele in history:
-    #     query += ele
-     
- 
-    print("histo: ", history)
+    history = " ".join(history)
+    history = re.sub(r'[^A-Za-z\s]', '', history)
 
-    # query = []
-    query = " ".join(map(lambda ele: " ".join("".join(filter(lambda char: char.isalnum(), part)) for part in ele.split("+")), json.loads(history)))
+    query = history
+    # query = " ".join(map(lambda ele: " ".join("".join(filter(lambda char: char.isalnum(), part)) for part in ele.split("+")), json.loads(history)))
 
     # print("i am searching for:", query)
     # Initialize the BatchRetrieve object with the provided index and retrieval model
@@ -142,7 +148,8 @@ def recommender(history):
                 doc = docs_df.iloc[doc_id - len(docs_df)]
             else:
                 doc = docs_df.iloc[doc_id]
-            docs_to_return.append({'title': doc['title'], 'content': doc['content'], 'url': doc['url'], 'article_tags': doc['article_tags']})
+            docs_to_return.append({'title': doc['title'], 'content': doc['content'], 'url': doc['url'], 'article_tags': doc['article_tags'], 'images_url': doc['images_url']})
+
 
         return docs_to_return
 
