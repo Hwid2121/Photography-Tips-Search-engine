@@ -15,7 +15,7 @@ const routes = [
         component: () => import('@/views/Home.vue'),
       },
     ],
-  },
+  }
 ]
 
 const router = createRouter({
