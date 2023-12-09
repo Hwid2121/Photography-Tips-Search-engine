@@ -20,9 +20,7 @@
             <v-col>
               <searchBar @search-results="updateResults" />
             </v-col>
-            
-  
-          </v-row>
+           </v-row>
           <v-btn
             v-if="results.length !=0"
             class="mt-4"

@@ -35,6 +35,7 @@ export default {
           return;
         }
         // const query = this.parseQuery(this.search);
+        query = query.replace(/[^\w\s]/gi, ' ');
         const response = await axios.get('http://localhost:8000/search?query=' + query);
         this.handleSuccess(response.data);
         // console.log(response.results);
